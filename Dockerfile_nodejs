@@ -1,0 +1,32 @@
+FROM debian
+MAINTAINER jaehunpark "setyourmindpark@gmail.com"
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_US.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+# set timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+RUN apt-get update && \
+    apt-get install -y vim apt-utils build-essential software-properties-common && \
+    apt-get install -y openssh-server && \
+    apt-get install -y git-core && \
+    apt-get install -y curl && \
+    curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -y pm2 -g && \
+    mkdir /var/run/sshd
+
+EXPOSE 22
+EXPOSE 4000
+VOLUME /root
+
+CMD ["/usr/sbin/sshd","-D"]

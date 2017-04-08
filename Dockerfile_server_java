@@ -1,0 +1,57 @@
+FROM debian
+MAINTAINER jaehunpark "setyourmindpark@gmail.com"
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="en_US.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+# set timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+RUN \
+    echo "===> add webupd8 repository..."  && \
+    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list  && \
+    echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list  && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886  && \
+    apt-get update
+
+
+RUN echo "===> install Java"  && \
+    echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections  && \
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
+    DEBIAN_FRONTEND=noninteractive  apt-get install -y --force-yes oracle-java8-installer oracle-java8-set-default
+
+
+RUN echo "===> clean up..."  && \
+    rm -rf /var/cache/oracle-jdk8-installer  && \
+    apt-get clean  && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV TOMCAT_VERSION=7.0.77
+
+# Get Tomcat
+RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-7/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
+tar xzvf /tmp/tomcat.tar.gz -C /opt && \
+mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
+rm /tmp/tomcat.tar.gz
+
+ENV CATALINA_HOME /opt/tomcat
+
+RUN apt-get update && \
+    apt-get install -y vim && \
+    apt-get install -y openssh-server && \
+    mkdir /var/run/sshd
+
+VOLUME /root
+
+EXPOSE 8080
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd","-D"]

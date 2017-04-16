@@ -22,5 +22,16 @@ EXPOSE 8080
 CMD ["/root/tomcat/bin/catalina.sh", "run"]
 
 
-## post command ##
+## description
+컨테이너 volume 경로가 root 이며 root경로에 host volume과 공유할 데이터들이 존재한다.
+docker-compose를 실행하기전 최초한번은 수동으로 컨테이너를 실행시켜,
+host volume에 container volume들의 데이터들을 복사를해야한다 .
+sudo docker run -d --name server-java server-java 후
 sudo docker cp server-java:/root /home/jaehunpark/docker/service/server-java/server-java-data
+이후 컨테이너종료후 docker-compose를 사용.
+
+## note
+이미지생성후 바로 docker-compose를 사용할경우,
+기본적으로 host volume을 container가 따라가기때문에
+host volume은 비어있을것이므로, 컨테이너 volume 경로인 /root 하위 데이터들은 비어있을것이므로
+위의 설명을 숙지하도록하자 .

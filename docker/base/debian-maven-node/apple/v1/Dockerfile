@@ -1,4 +1,4 @@
-FROM setyourmindpark/debian-maven3
+FROM setyourmindpark/debian-maven:apple
 MAINTAINER jaehunpark "setyourmindpark@gmail.com"
 
 RUN apt-get update && \

@@ -1,4 +1,4 @@
-FROM setyourmindpark/debian-maven3-node6
+FROM setyourmindpark/debian-maven-node:apple
 MAINTAINER jaehunpark "setyourmindpark@gmail.com"
 
 ENV TOMCAT_VERSION=8.5.13

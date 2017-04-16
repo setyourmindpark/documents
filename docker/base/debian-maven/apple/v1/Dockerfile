@@ -1,4 +1,4 @@
-FROM setyourmindpark/debian-oracle-jdk8
+FROM setyourmindpark/debian-oracle-jdk:8
 MAINTAINER jaehunpark "setyourmindpark@gmail.com"
 
 ENV MAVEN_VERSION=3.5.0

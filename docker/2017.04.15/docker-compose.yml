@@ -26,6 +26,7 @@ services:
   server-node:
     image: server-node
     ports:
+      - "33:22"
       - "88:4000"
     environment:
       - TZ=Asia/Seoul
@@ -43,6 +44,7 @@ services:
       - TZ=Asia/Seoul
     volumes:
       - /home/jaehunpark/docker/service/server-java/server-java-data:/root
+    tty: true
     depends_on:
       - mariadb
     container_name: server-java

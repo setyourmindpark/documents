@@ -1,0 +1,26 @@
+FROM setyourmindpark/debian-oracle-jdk8
+MAINTAINER jaehunpark "setyourmindpark@gmail.com"
+
+ENV TOMCAT_VERSION=7.0.77
+
+# Get Tomcat
+RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-7/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
+tar xzvf /tmp/tomcat.tar.gz -C /root && \
+mv /root/apache-tomcat-${TOMCAT_VERSION} /root/tomcat && \
+rm /tmp/tomcat.tar.gz
+
+ENV CATALINA_HOME /root/tomcat
+
+RUN apt-get update && \
+    apt-get install -y vim
+
+VOLUME /root
+
+EXPOSE 8080
+
+# Launch Tomcat
+CMD ["/root/tomcat/bin/catalina.sh", "run"]
+
+
+## post command ##
+sudo docker cp server-java:/root /home/jaehunpark/docker/service/server-java/server-java-data

@@ -1,0 +1,44 @@
+version: '2'
+services:
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+      - TZ=Asia/Seoul
+    volumes:
+      - /home/jaehunpark/docker/mariadb/mariadb_data:/var/lib/mysql
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    container_name: mariadb
+  jenkins:
+    image: jenkins
+    ports:
+      - "89:8080"
+    volumes:
+      - /home/jaehunpark/docker/jenkins/jenkins_data:/root
+    container_name: jenkins
+  deploy:
+    image: deploy
+    ports:
+      - "33:22"
+      - "88:4000"
+    volumes:
+      - /home/jaehunpark/docker/deploy/deploy_data:/root
+    tty: true
+    depends_on:
+      - mariadb
+    container_name: deploy
+  spring-deploy:
+    image: spring-deploy
+    ports:
+      - "80:8080"
+      - "35:22"
+    volumes:
+      - /home/jaehunpark/docker/spring-deploy/spring-deploy-data:/root
+    depends_on:
+      - mariadb
+    container_name: spring-deploy

@@ -1,0 +1,30 @@
+FROM setyourmindpark/debian-maven-node-gradle:apple
+MAINTAINER jaehunpark "setyourmindpark@gmail.com"
+
+ENV TOMCAT_VERSION=8.5.14
+
+# Get Tomcat
+RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \
+    tar xzvf /tmp/tomcat.tar.gz -C /opt && \
+    mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
+    rm /tmp/tomcat.tar.gz
+
+ENV CATALINA_HOME /opt/tomcat
+
+# jenkins download
+#RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
+RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/2.7.2/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
+
+RUN apt-get update && \
+    apt-get install -y vim && \
+    apt-get install -y git-core
+
+RUN apt-get update && \
+    apt-get install -y gradle
+
+VOLUME /root
+
+EXPOSE 8080
+
+# Launch Tomcat
+CMD ["/opt/tomcat/bin/catalina.sh", "run"]

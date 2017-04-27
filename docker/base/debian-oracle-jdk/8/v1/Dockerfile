@@ -20,4 +20,7 @@ RUN echo "===> clean up..."  && \
     apt-get clean  && \
     rm -rf /var/lib/apt/lists/*
 
+ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle
+ENV PATH=${PATH}:${JAVA_HOME}/bin
+
 CMD ["/bin/bash"]

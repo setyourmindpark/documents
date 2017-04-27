@@ -12,15 +12,12 @@ RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-8/v${TOMCAT_V
 ENV CATALINA_HOME /opt/tomcat
 
 # jenkins download
-#RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
-RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/2.7.2/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
+RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/latest/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
+#RUN wget --quiet --no-cookies http://mirrors.jenkins.io/war-stable/2.7.2/jenkins.war -O ${CATALINA_HOME}/webapps/jenkins.war
 
 RUN apt-get update && \
     apt-get install -y vim && \
     apt-get install -y git-core
-
-RUN apt-get update && \
-    apt-get install -y gradle
 
 VOLUME /root
 

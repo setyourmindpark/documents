@@ -44,7 +44,6 @@ services:
     tty: true
     depends_on:
       - mariadb
-      - nginx
     networks:
       network-infra:
         ipv4_address: 10.10.200.3
@@ -70,6 +69,8 @@ services:
       - TZ=Asia/Seoul
     volumes:
       - /home/jaehunpark/docker/service/nginx/nginx-data:/etc/nginx
+    depends_on:
+      - server-node-1
     networks:
       network-infra:
         ipv4_address: 10.10.200.2

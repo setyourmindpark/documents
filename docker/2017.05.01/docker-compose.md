@@ -86,7 +86,7 @@ services:
     environment:
       - TZ=Asia/Seoul
     volumes:
-      - /home/jaehunpark/docker/service/nginx/nginx-data:/etc/nginx
+      - /home/jaehunpark/docker/service/nginx/nginx-volume:/etc/nginx
     depends_on:
       - server-node-1
       - server-node-2

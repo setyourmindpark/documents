@@ -14,6 +14,7 @@ RUN echo 'deb http://nginx.org/packages/debian/ jessie nginx' >> /etc/apt/source
 
 VOLUME /etc/nginx
 EXPOSE 80
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
 

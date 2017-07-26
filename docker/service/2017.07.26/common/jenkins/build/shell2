@@ -1,0 +1,21 @@
+ssh server-node-1 "rm -f ~/.bash_profile"
+ env | grep SKELETONE_ | sed 's/.*/export &/' | ssh server-node-1 'cat > ~/.bash_profile'
+ ssh server-node-1 "source ~/.bash_profile"
+
+-#!/bin/sh
+ssh server-node-1 <<EOF
+ pm2 delete apiServer
+ rm -rf /root/nodejs-skeletone-v3
+ exit
+EOF
+
+scp -r /root/.jenkins/workspace/nodejs-skeletone-v3 server-node-1:/root
+
+-#!/bin/sh
+ssh server-node-1 <<EOF
+ cd /root/nodejs-skeletone-v3
+ npm install --production
+ env
+ pm2 start bin/www.js --name apiServer
+ exit
+EOF

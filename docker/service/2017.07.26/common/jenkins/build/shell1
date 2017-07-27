@@ -1,0 +1,4 @@
+apt-get install -y build-essential python-software-properties python g++ make
+npm prune
+npm install
+npm test

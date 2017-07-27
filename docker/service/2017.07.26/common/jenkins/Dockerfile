@@ -9,15 +9,15 @@ ENV CATALINA_HOME=${HOME}/tomcat
 ENV MAVEN_HOME=${HOME}/maven
 
 RUN apt-get update && \
+    apt-get install -y build-essential && \
+    apt-get install -y python-software-properties && \
+    apt-get install -y python && \
+    apt-get install -y g++ && \
+    apt-get install -y make && \
     apt-get install -y vim && \
     apt-get install -y git-core && \
     apt-get install -y curl && \
-    apt-get install -y wget && \
-    apt-get install -y build-essential && \
-    apt-get install -y python-software-properties && \
-    apt-get install -y python &&\
-    apt-get install -y g++ && \
-    apt-get install -y make
+    apt-get install -y wget
 
 # Get Tomcat
 RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \

@@ -41,10 +41,10 @@ RUN mkdir /var/origin && \
     cp -r ${HOME}/.nvm /var/origin && \
     cp ${HOME}/.bashrc /var/origin
 
-ADD entrypoint.sh /var/origin/entrypoint.sh
+ADD entrypoint.sh /entrypoint.sh
 
 VOLUME ${HOME}
 
 EXPOSE 8080
 
-ENTRYPOINT ["/var/origin/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

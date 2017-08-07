@@ -1,7 +1,7 @@
+npm prune
 npm install
 npm test
 
-rm -rf node_modules
 rm -f *nvm*
 rm -f *.env
 rm -rf .git*

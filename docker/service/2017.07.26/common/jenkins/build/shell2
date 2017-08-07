@@ -1,6 +1,3 @@
-rm -f *nvm*
-rm -f *.env
-rm -rf .git*
 
 # server1
 ssh server-node-1 "rm -f ~/.bash_profile"

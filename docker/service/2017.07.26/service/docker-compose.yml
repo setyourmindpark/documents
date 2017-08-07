@@ -96,7 +96,7 @@ services:
 #        ipv4_address: 10.10.200.7
 #    container_name: rabbitmq
 networks:
-  network-infra:
+  net-compose:
     driver: bridge
     ipam:
       config:

@@ -1,0 +1,25 @@
+version: "3.3"
+
+networks:
+  service-network:
+    driver: overlay
+    attachable: true
+
+services:
+  mariadb:
+    image: setyourmindpark/debian-nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./nginx/volume:/etc/nginx
+    networks:
+      - service-network
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        constraints:
+          - node.role == node-nginx

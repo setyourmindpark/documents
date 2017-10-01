@@ -1,0 +1,29 @@
+version: "3.3"
+
+networks:
+  service-network:
+    driver: overlay
+    attachable: true
+
+services:
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+      - TZ=Asia/Seoul
+    volumes:
+      - ./mariadb/volume:/var/lib/mysql
+    networks:
+      - service-network
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    deploy:
+      mode: replicated
+      replicas: 3
+      placement:
+        constraints:
+          - node.role == node-db

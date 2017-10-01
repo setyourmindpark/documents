@@ -1,0 +1,47 @@
+DOCKER_REGISTRY_PROTOCOL=https
+DOCKER_REGISTRY_DOMAIN=something
+DOCKER_REGISTRY_PORT=5000
+DOCKER_REGISTRY_USER=user
+DOCKER_REGISTRY_PASSWD=passwd
+REPOSITORIES=`curl -k -u $DOCKER_REGISTRY_USER:$DOCKER_REGISTRY_PASSWD -X GET $DOCKER_REGISTRY_PROTOCOL://$DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/v2/_catalog | jq -r '.repositories'`
+
+APP_NAME=app-name
+SERVICE_NAME=cservice-name
+APP_VERSION=`date +"%y%m%d%H%M%S"`
+APP_NETWORK=app-network
+APP_PRIVATE_PORT=4000
+APP_EXPOSE_PORT=4000
+APP_REPLICAS=3
+
+IS_APP_EXIST=`echo $REPOSITORIES | jq 'contains(["'$APP_NAME'"])'`
+
+##------------------------------------------------------------------------------------------------------------------------
+
+docker build --tag $APP_NAME:$APP_VERSION .
+docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWD $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT
+docker tag $APP_NAME:$APP_VERSION $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/$APP_NAME:$APP_VERSION
+docker push $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/$APP_NAME:$APP_VERSION
+docker rmi -f $APP_NAME:$APP_VERSION
+docker rmi -f $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/$APP_NAME:$APP_VERSION
+
+if $IS_APP_EXIST
+then
+   echo exist
+
+   docker service update \
+   --image $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/$APP_NAME:$APP_VERSION \
+   $SERVICE_NAME
+
+else
+   echo not exist
+
+   docker network create --driver overlay $APP_NETWORK
+
+   docker service create -d \
+   --name $SERVICE_NAME \
+   --with-registry-auth \
+   --network $APP_NETWORK \
+   -p $APP_EXPOSE_PORT:$APP_PRIVATE_PORT \
+   --replicas=$APP_REPLICAS \
+   $DOCKER_REGISTRY_DOMAIN:$DOCKER_REGISTRY_PORT/$APP_NAME:$APP_VERSION
+fi

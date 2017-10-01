@@ -1,0 +1,60 @@
+version: "3.3"
+
+networks:
+  service-network:
+  common_service-network:
+    external:
+      name: common_service-network
+
+services:
+  fluentd:
+    ports:
+      - "24224:24224"
+      - "9292:9292"
+    volumes:
+      - ./fluentd/config:/etc/td-agent
+      - ./fluentd/log:/var/log/td-agent
+      - ./fluentd/service-log:/log
+      - ./fluentd/ui-data:/opt/td-agent/data
+      - ./fluentd/gems:/opt/td-agent/embedded/lib/ruby/gems
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - service-network
+    deploy:
+      placement:
+        constraints:
+          - node.role == node-sub
+
+  # file-api-server:
+  #   image: server-node:7
+  #   networks:
+  #     - common_service-network
+  #     - service-network
+  #   ports:
+  #     - "9500:4000"
+  #   environment:
+  #     - TZ=Asia/Seoul
+  #   tty: true
+  #   volumes:
+  #     - ./file-api-server:/root
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 2
+  #     placement:
+  #       constraints:
+  #         - node.role == node-sub
+
+  redis:
+    image: redis
+    networks:
+      - service-network
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Seoul
+    tty: true
+    deploy:
+      placement:
+        constraints:
+          - node.role == node-sub

@@ -1,0 +1,46 @@
+version: "3.3"
+
+networks:
+  service-network:
+    driver: overlay
+    attachable: true
+
+services:
+  jenkins:
+    image: custom-jenkins
+    ports:
+      - "9111:8080"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./jenkins/volume:/root
+      - /var/run:/var/run:rw
+    networks:
+      - service-network
+    deploy:
+      placement:
+        constraints:
+          - node.role == master
+
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./registry/auth:/auth
+      - ./registry/certs:/certs
+      - ./registry/data:/data
+    networks:
+      - service-network
+    environment:
+      - TZ=Asia/Seoul
+      - REGISTRY_AUTH=htpasswd
+      - REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/data
+      - REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+      - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.crt
+      - REGISTRY_HTTP_TLS_KEY=/certs/server.key
+    deploy:
+      placement:
+        constraints:
+          - node.role == master

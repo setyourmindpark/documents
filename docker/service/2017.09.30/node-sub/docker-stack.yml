@@ -2,21 +2,24 @@ version: "3.3"
 
 networks:
   service-network:
-  common_service-network:
-    external:
-      name: common_service-network
+    driver: overlay
+    attachable: true
+  # common_service-network:
+  #   external:
+  #     name: common_service-network
 
 services:
   fluentd:
+    image: setyourmindpark/debian-fluentd
     ports:
       - "24224:24224"
       - "9292:9292"
     volumes:
-      - ./fluentd/config:/etc/td-agent
-      - ./fluentd/log:/var/log/td-agent
-      - ./fluentd/service-log:/log
-      - ./fluentd/ui-data:/opt/td-agent/data
-      - ./fluentd/gems:/opt/td-agent/embedded/lib/ruby/gems
+      - /root/docker/fluentd/config:/etc/td-agent
+      - /root/docker/fluentd/log:/var/log/td-agent
+      - /root/docker/fluentd/service-log:/log
+      - /root/docker/fluentd/ui-data:/opt/td-agent/data
+      - /root/docker/fluentd/gems:/opt/td-agent/embedded/lib/ruby/gems
     environment:
       - TZ=Asia/Seoul
     networks:
@@ -24,26 +27,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == node-sub
-
-  # file-api-server:
-  #   image: server-node:7
-  #   networks:
-  #     - common_service-network
-  #     - service-network
-  #   ports:
-  #     - "9500:4000"
-  #   environment:
-  #     - TZ=Asia/Seoul
-  #   tty: true
-  #   volumes:
-  #     - ./file-api-server:/root
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 2
-  #     placement:
-  #       constraints:
-  #         - node.role == node-sub
+          - node.hostname == node-sub
 
   redis:
     image: redis
@@ -57,4 +41,4 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == node-sub
+          - node.hostname == node-sub

@@ -14,7 +14,7 @@ services:
     environment:
       - TZ=Asia/Seoul
     volumes:
-      - ./nginx/volume:/etc/nginx
+      - /root/docker/nginx/volume:/etc/nginx
     networks:
       - service-network
     deploy:
@@ -22,4 +22,4 @@ services:
       replicas: 3
       placement:
         constraints:
-          - node.role == node-nginx
+          - node.hostname == node-nginx

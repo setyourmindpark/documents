@@ -2,7 +2,7 @@ FROM setyourmindpark/debian-oracle-jdk:8
 MAINTAINER jaehunpark "setyourmindpark@gmail.com"
 
 ENV HOME=/root
-ENV TOMCAT_VERSION=8.5.20
+ENV TOMCAT_VERSION=8.5.23
 ENV MAVEN_VERSION=3.5.0
 ENV NVM_VERSION=v0.33.2
 ENV CATALINA_HOME=${HOME}/tomcat

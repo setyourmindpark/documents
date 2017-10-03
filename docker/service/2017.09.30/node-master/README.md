@@ -1,4 +1,4 @@
-all docker-stack.yml ( node-** except node-master ) file of all node should be located in this node ( node-master )
+all docker-stack.yml file of all node should be located in this node ( node-master )
 then execute sequentially
 1. common-stack.yml
 2. docker-stack.yml ( node-db )

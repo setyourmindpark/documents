@@ -22,8 +22,8 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
     deploy:
-      mode: replicated
-      replicas: 3
+#      mode: replicated       # [ NOTE ] if you create replicas of maraidb, won`t work
+#      replicas: 3
       placement:
         constraints:
           - node.hostname == node-db

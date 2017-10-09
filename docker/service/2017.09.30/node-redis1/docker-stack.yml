@@ -18,4 +18,4 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == node-sub
+          - node.hostname == node-redis1

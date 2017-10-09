@@ -28,17 +28,3 @@ services:
       placement:
         constraints:
           - node.hostname == node-sub
-
-  redis:
-    image: redis
-    networks:
-      - service-network
-    ports:
-      - "6379:6379"
-    environment:
-      - TZ=Asia/Seoul
-    tty: true
-    deploy:
-      placement:
-        constraints:
-          - node.hostname == node-sub

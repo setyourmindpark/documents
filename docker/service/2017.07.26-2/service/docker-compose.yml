@@ -1,0 +1,54 @@
+version: '2'
+services:
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+      - TZ=Asia/Seoul
+    volumes:
+      - ./mariadb/mariadb_data:/var/lib/mysql
+    networks:
+      - common_net
+      - net
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    container_name: mariadb
+
+  server-node:
+    image: server-node
+    ports:
+      - "4000:4000"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./server-node/volume:/root
+    depends_on:
+      - mariadb
+    networks:
+      - common_net
+      - net
+    container_name: server-node
+  server-java:
+    image: server-java
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./server-java/volume:/root
+    networks:
+      - common_net
+      - net
+    depends_on:
+      - mariadb
+    container_name: server-java
+networks:
+  net:
+    driver: bridge
+  common_net:
+    external:
+      name: common_net

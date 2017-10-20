@@ -5,7 +5,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=0000    # NOTE this environment set init password of root user. if you wanna change root password, change database cloumn in user.
+      - MYSQL_ROOT_PASSWORD=0000    # NOTE this environment set init password of root user. if you wanna change root password, change database cloumn in user table.
       - TZ=Asia/Seoul
     volumes:
       - ./mariadb/mariadb_data:/var/lib/mysql

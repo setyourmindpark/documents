@@ -13,7 +13,7 @@ networks:
 
 # when you config backend server on first time, that server is plain container.
 services:
-  backend:
+  server:
     image: setyourmindpark/debian-utf8
     ports:
       - "4000:4000"

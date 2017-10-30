@@ -1,0 +1,30 @@
+version: "3.3"
+
+networks:
+  service-network:
+    driver: overlay
+    attachable: true
+  common_service-network:
+    external:
+      name: common_service-network
+  db_service-network:
+    external:
+      name: db_service-network
+
+# when you config backend server on first time, that server is plain container.
+services:
+  backend:
+    image: setyourmindpark/debian-utf8
+    ports:
+      - "4000:4000"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - service-network
+      - common_service-network
+      - db_service-network
+    tty: true
+    deploy:
+      replicas: 10
+      labels:
+        - type=backend

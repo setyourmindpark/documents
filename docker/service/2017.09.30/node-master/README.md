@@ -5,4 +5,13 @@ then execute sequentially
 3. docker-stack.yml ( node-sub )
 5. docker-stack.yml ( node-nginx )
 6. monitor-stack.yml
-7. then build services on jenkins
+7. then build services on jenkins  
+
+
+
+label update
+docker node update --label-add type=db node-db1
+docker node update --label-add type=db node-db2
+docker node update --label-add type=backend node-backend1
+docker node update --label-add type=backend node-backend2
+docker node update --label-add type=backend node-backend3

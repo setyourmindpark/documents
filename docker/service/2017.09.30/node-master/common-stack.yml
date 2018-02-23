@@ -13,23 +13,23 @@ services:
     environment:
       - TZ=Asia/Seoul
     volumes:
-      - ./jenkins/volume:/root
+      - /root/docker/jenkins/volume:/root
       - /var/run:/var/run:rw
     networks:
       - service-network
     deploy:
       placement:
         constraints:
-          - node.role == master
+          - node.hostname == node-master
 
   registry:
     image: registry:2
     ports:
       - "5000:5000"
     volumes:
-      - ./registry/auth:/auth
-      - ./registry/certs:/certs
-      - ./registry/data:/data
+      - /root/docker/registry/auth:/auth
+      - /root/docker/registry/certs:/certs
+      - /root/docker/registry/data:/data
     networks:
       - service-network
     environment:
@@ -43,4 +43,4 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == master
+          - node.hostname == node-master

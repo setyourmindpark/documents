@@ -1,0 +1,30 @@
+version: "3.3"
+
+networks:
+  service-network:
+    driver: overlay
+    attachable: true
+  # common_service-network:
+  #   external:
+  #     name: common_service-network
+
+services:
+  fluentd:
+    image: setyourmindpark/debian-fluentd
+    ports:
+      - "24224:24224"
+      - "9292:9292"
+    volumes:
+      - /root/docker/fluentd/config:/etc/td-agent
+      - /root/docker/fluentd/log:/var/log/td-agent
+      - /root/docker/fluentd/service-log:/log
+      - /root/docker/fluentd/ui-data:/opt/td-agent/data
+      - /root/docker/fluentd/gems:/opt/td-agent/embedded/lib/ruby/gems
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - service-network
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == node-log

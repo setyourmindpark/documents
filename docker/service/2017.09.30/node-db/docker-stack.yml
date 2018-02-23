@@ -14,7 +14,8 @@ services:
       - MYSQL_ROOT_PASSWORD=0000
       - TZ=Asia/Seoul
     volumes:
-      - ./mariadb/volume:/var/lib/mysql
+      - /root/docker/mariadb/volume/config:/etc/mysql/conf.d
+      - /root/docker/mariadb/volume/data:/var/lib/mysql
     networks:
       - service-network
     command:
@@ -22,8 +23,36 @@ services:
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
     deploy:
-      mode: replicated
-      replicas: 3
-      placement:
-        constraints:
-          - node.role == node-db
+      replicas: 2
+      labels:
+        - type=db
+
+# version: "3.3"
+#
+# networks:
+#   service-network:
+#     driver: overlay
+#     attachable: true
+#
+# services:
+#   mariadb:
+#     image: mariadb
+#     ports:
+#       - "3306:3306"
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=0000
+#       - TZ=Asia/Seoul
+#     volumes:
+#       - /root/docker/mariadb/volume:/var/lib/mysql
+#     networks:
+#       - service-network
+#     command:
+#       - "mysqld"
+#       - "--character-set-server=utf8mb4"
+#       - "--collation-server=utf8mb4_unicode_ci"
+#     deploy:
+# #      mode: replicated       # [ NOTE ] if you create replicas of maraidb, won`t work
+# #      replicas: 3
+#       placement:
+#         constraints:
+#           - node.hostname == node-db

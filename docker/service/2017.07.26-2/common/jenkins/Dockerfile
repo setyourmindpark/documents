@@ -17,22 +17,7 @@ RUN apt-get update && \
     apt-get install -y vim && \
     apt-get install -y git-core && \
     apt-get install -y curl && \
-    apt-get install -y wget && \
-    apt-get install -y jq
-
-# install docker ( to control docker in jenkins )
-RUN apt-get install -y apt-transport-https && \
-    apt-get install -y ca-certificates && \
-    apt-get install -y gnupg2 && \
-    apt-get install -y software-properties-common && \
-    curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add - && \
-    apt-key fingerprint 0EBFCD88 && \
-    add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-    $(lsb_release -cs) \
-    stable" && \
-    apt-get update && \
-    apt-get install -y docker-ce
+    apt-get install -y wget
 
 # Get Tomcat
 RUN wget --quiet --no-cookies http://apache.tt.co.kr/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz && \

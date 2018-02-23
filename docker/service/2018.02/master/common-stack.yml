@@ -1,0 +1,46 @@
+version: "3.5"
+
+networks:
+  net:
+    driver: overlay
+    attachable: true
+
+services:
+  jenkins:
+    image: setyourmindpark_jenkins
+    ports:
+      - "9111:8080"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /root/common/jenkins/volume:/root
+      - /var/run:/var/run:rw
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == common
+
+  registry:
+    image: registry
+    ports:
+      - "5000:5000"
+    volumes:
+      - /root/common/registry/auth:/auth
+      - /root/common/registry/cert:/certs
+      - /root/common/registry/volume:/data
+    networks:
+      - net
+    environment:
+      - TZ=Asia/Seoul
+      - REGISTRY_AUTH=htpasswd
+      - REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/data
+      - REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+      - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.crt
+      - REGISTRY_HTTP_TLS_KEY=/certs/server.key
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == common

@@ -1,0 +1,51 @@
+version: "3.5"
+
+networks:
+  net:
+    driver: overlay
+    attachable: true    
+
+services:
+  db_failover:
+    image: setyourmindpark/debian-nginx
+    ports:
+      - 3306:80
+    environment:
+      - TZ=Asia/Seoul    
+    networks:
+      - net
+    volumes:
+      - /home/docker/nginx/volume:/etc/nginx
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == db_failover
+
+  nginx:
+    image: setyourmindpark/debian-nginx
+    ports:
+      - 443:443
+      - 80:80
+    environment:
+      - TZ=Asia/Seoul    
+    networks:
+      - net
+    deploy:
+      placement:
+        constraints:
+          - node.labels.type == nginx
+
+  backend:
+    image: setyourmindpark/debian-node:8
+    ports:
+      - 4000:4000
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - net
+    tty: true
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.labels.type == backend    

@@ -11,7 +11,7 @@ $ docker node update --label-add type=backend [ backend nodes id ]
 docker-stack.yml 에 모든 service 설정을 구성해도되지만 test 중 docker private registry에서 jenkins로 부터 service update된 backend와 같은 image가 가변적으로 변하는 service들은 image가 docker-stack.yml에 정의된 이미지로 돌아갈수도 있기에 service들을 쪼개는 방식으로 사용한다.  
 각 service들은 stack 이름만 같다면 ( setyourmindpark_service ) stack에 자동으로 합쳐진다. ( $ docker stack ls )
 ``` bash
-$ docker network create --driver overlay setyourmindpark_service_net
+$ docker network create --driver overlay --attachable setyourmindpark_service_net  # --attachable option은 container 수동생성시( run ) 수동으로 --network setyourmindpark_service_net 붙여줄수있기위함. 
 $ docker stack deploy -c db-failover-service.yml setyourmindpark_service
 $ docker stack deploy -c backend-service.yml setyourmindpark_service
 $ docker stack deploy -c nginx-service.yml setyourmindpark_service

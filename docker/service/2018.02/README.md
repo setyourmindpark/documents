@@ -7,6 +7,13 @@ $ docker node update --label-add type=nginx [ nginx nodes id ]
 $ docker node update --label-add type=backend [ backend nodes id ]
 ```
 
+## deploy sequence
+``` bash
+$ docker network create --driver overlay setyourmindpark_service_net
+$ docker stack deploy -c db-failover-service.yml setyourmindpark_service
+$ docker stack deploy -c backend-service.yml setyourmindpark_service
+$ docker stack deploy -c nginx-service.yml setyourmindpark_service
+```
 
 ## db replicas 설정 
 https://setyourmindpark.github.io/2018/02/09/database-1/   

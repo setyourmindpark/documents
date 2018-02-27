@@ -1,0 +1,23 @@
+version: "3.5"
+
+networks:
+  net:
+    external: true
+    name: setyourmindpark_service_net
+
+services:
+  nginx:
+    image: setyourmindpark/debian-nginx
+    ports:
+      - 3306:80
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - /root/nginx/volume:/etc/nginx
+    networks:
+      - net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+        - node.labels.type == db-failover

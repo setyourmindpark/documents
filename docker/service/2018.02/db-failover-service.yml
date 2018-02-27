@@ -13,7 +13,7 @@ services:
     environment:
       - TZ=Asia/Seoul
     volumes:
-      - /root/nginx/volume:/etc/nginx
+      - /home/docker/nginx/volume:/etc/nginx
     networks:
       - net
     deploy:
